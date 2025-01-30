@@ -14,6 +14,7 @@ class AppButton extends StatelessWidget {
   final Color? backgroundColor;
   final Color? outlineColor;
   final double? borderRadius;
+  final double? horizontalPadding;
   const AppButton({
     super.key,
     this.isOutlined = false,
@@ -26,6 +27,7 @@ class AppButton extends StatelessWidget {
     this.backgroundColor,
     this.outlineColor,
     this.borderRadius,
+    this.horizontalPadding,
   });
 
   @override
@@ -35,9 +37,7 @@ class AppButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           label,
-          style: labelStyle ?? TextStyle(
-            color: foregroundColor
-          ),
+          style: labelStyle ?? TextStyle(color: foregroundColor),
         ),
       );
     } else if (isOutlined) {
@@ -48,7 +48,7 @@ class AppButton extends StatelessWidget {
             color: outlineColor ?? appLightMode.error,
             width: outlineThickness ?? 5.h,
           )),
-          padding: WidgetStatePropertyAll(EdgeInsets.all(10.w)),
+          padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: horizontalPadding ?? 10.w)),
           shape: WidgetStatePropertyAll(RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius ?? 15.r),
           )),
@@ -59,10 +59,11 @@ class AppButton extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: labelStyle ?? TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 20.sp,
-          ),
+          style: labelStyle ??
+              TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20.sp,
+              ),
         ),
       );
     } else {

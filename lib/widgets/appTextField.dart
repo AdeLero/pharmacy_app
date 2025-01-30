@@ -22,6 +22,7 @@ class AppTextField extends StatefulWidget {
   final FloatingLabelBehavior? floatingLabelBehavior;
   final double? borderRadius;
   final Function()? onSuffixTap;
+  final TextEditingController? controller;
   const AppTextField({
     super.key,
     required this.label,
@@ -42,6 +43,7 @@ class AppTextField extends StatefulWidget {
     this.floatingLabelBehavior,
     this.borderRadius,
     this.onSuffixTap,
+    this.controller,
   });
 
   @override
@@ -55,6 +57,7 @@ class _AppTextFieldState extends State<AppTextField> {
     return TextField(
       obscureText: widget.isPassword ? obscureText : false,
       readOnly: widget.isReadOnly,
+      controller: widget.controller,
       style: TextStyle(
         color: widget.textColor ?? AppColors.black,
       ),
@@ -66,17 +69,22 @@ class _AppTextFieldState extends State<AppTextField> {
             color: widget.hintTextColor,
           ),
           prefixIcon: widget.prefixIconButton,
-          suffixIcon: widget.isPassword ? GestureDetector(
-            onTap: widget.onSuffixTap ?? () {
-              setState(() {
-                obscureText = !obscureText;
-              });
-            },
-            child: Icon(
-              obscureText ? widget.suffixIconButton1 ?? CupertinoIcons.eye : widget.suffixIconButton2 ?? CupertinoIcons.eye_slash,
-              color: widget.suffixColor ?? AppColors.gray,
-            ),
-          ) : null,
+          suffixIcon: widget.isPassword
+              ? GestureDetector(
+                  onTap: widget.onSuffixTap ??
+                      () {
+                        setState(() {
+                          obscureText = !obscureText;
+                        });
+                      },
+                  child: Icon(
+                    obscureText
+                        ? widget.suffixIconButton1 ?? CupertinoIcons.eye
+                        : widget.suffixIconButton2 ?? CupertinoIcons.eye_slash,
+                    color: widget.suffixColor ?? AppColors.gray,
+                  ),
+                )
+              : null,
           label: Text(
             widget.label,
             style: TextStyle(

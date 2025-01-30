@@ -14,4 +14,5 @@ class Routes {
   static const String saleList = "/SaleListScreen";
   static const String saleFinalization = "/SaleFinalizationScreen";
   static const String createProduct = "/CreateProduct";
+  static const String setPricing = "/SetPricing";
 }

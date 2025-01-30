@@ -4,7 +4,6 @@ import 'package:pebble_pharmacy/customization/theme/colors.dart';
 import 'package:pebble_pharmacy/customization/theme/theme.dart';
 import 'package:pebble_pharmacy/routes/routes.dart';
 import 'package:pebble_pharmacy/widgets/appButton.dart';
-import 'package:pebble_pharmacy/widgets/appTextField.dart';
 
 class SalesLandingScreen extends StatelessWidget {
   const SalesLandingScreen({super.key});
@@ -28,10 +27,10 @@ class SalesLandingScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: AppButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, Routes.salesSearch);
-                      },
-                      label: "Click Here to search a product",
+                    onPressed: () {
+                      Navigator.pushNamed(context, Routes.salesSearch);
+                    },
+                    label: "Click Here to search a product",
                     backgroundColor: AppColors.white,
                     labelStyle: TextStyle(
                       color: AppColors.black,

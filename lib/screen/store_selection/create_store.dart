@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pebble_pharmacy/customization/theme/colors.dart';
-import 'package:pebble_pharmacy/customization/theme/theme.dart';
 import 'package:pebble_pharmacy/routes/routes.dart';
 import 'package:pebble_pharmacy/widgets/appButton.dart';
 import 'package:pebble_pharmacy/widgets/appTextField.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pebble_pharmacy/customization/theme/theme.dart';
 import 'package:pebble_pharmacy/routes/screens.dart';
@@ -21,8 +22,7 @@ void main() {
     systemNavigationBarIconBrightness: Brightness.light,
   ));
 
-
-  runApp(const MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -32,21 +32,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: Size(412, 917),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        child:  MaterialApp(
-          title: "Pebble Pharmacy",
-          theme: appTheme,
-          routes: appRoutes,
-          onGenerateRoute: (settings) {
-            final matchingRoute = screens.firstWhere(
-                (route) => route.name == settings.name,
-              orElse: () => throw Exception("Route not found: ${settings.name}"),
-            );
-            return MaterialPageRoute(builder: (context) => matchingRoute.page(settings.arguments));
-          },
-          // home: ,
-        ),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: MaterialApp(
+        title: "Pebble Pharmacy",
+        theme: appTheme,
+        routes: appRoutes,
+        onGenerateRoute: (settings) {
+          final matchingRoute = screens.firstWhere(
+            (route) => route.name == settings.name,
+            orElse: () => throw Exception("Route not found: ${settings.name}"),
+          );
+          return MaterialPageRoute(
+              builder: (context) => matchingRoute.page(settings.arguments));
+        },
+        // home: ,
+      ),
     );
   }
 }
