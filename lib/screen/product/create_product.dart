@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pebble_pharmacy/customization/theme/colors.dart';
 import 'package:pebble_pharmacy/customization/theme/theme.dart';
 import 'package:pebble_pharmacy/widgets/appButton.dart';
@@ -7,11 +9,17 @@ import 'package:pebble_pharmacy/widgets/appTextField.dart';
 import 'package:pebble_pharmacy/widgets/spacing/alert_dialog.dart';
 import 'package:pebble_pharmacy/widgets/spacing/y_margin.dart';
 
-class CreateProduct extends StatelessWidget {
+class CreateProduct extends HookConsumerWidget {
   const CreateProduct({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final productNameController = useTextEditingController();
+    final brandNameController = useTextEditingController();
+    final companyNameController = useTextEditingController();
+    final strengthController = useTextEditingController();
+    final dosageController = useTextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: appTheme.primaryColor,
@@ -61,6 +69,7 @@ class CreateProduct extends StatelessWidget {
               label: "Paracetamol, Metronidazole",
               labelColor: AppColors.lightGray,
               floatingLabelBehavior: FloatingLabelBehavior.never,
+              controller: productNameController,
             ),
             YMargin(16.h),
             Text(
@@ -74,6 +83,7 @@ class CreateProduct extends StatelessWidget {
               label: "Bonadol, Flagyl, Emgyl",
               labelColor: AppColors.lightGray,
               floatingLabelBehavior: FloatingLabelBehavior.never,
+              controller: brandNameController,
             ),
             YMargin(16.h),
             Text(
@@ -87,6 +97,7 @@ class CreateProduct extends StatelessWidget {
               label: "Fidson, M&B, Emzor",
               labelColor: AppColors.lightGray,
               floatingLabelBehavior: FloatingLabelBehavior.never,
+              controller: companyNameController,
             ),
             YMargin(16.h),
             Text(
@@ -100,6 +111,7 @@ class CreateProduct extends StatelessWidget {
               label: "500mg, 50ml, 200iu",
               labelColor: AppColors.lightGray,
               floatingLabelBehavior: FloatingLabelBehavior.never,
+              controller: strengthController,
             ),
             YMargin(16.h),
             Text(
@@ -113,6 +125,7 @@ class CreateProduct extends StatelessWidget {
               label: "Syrup, Tabs, Vial",
               labelColor: AppColors.lightGray,
               floatingLabelBehavior: FloatingLabelBehavior.never,
+              controller: dosageController,
             ),
             YMargin(56.h),
             Row(

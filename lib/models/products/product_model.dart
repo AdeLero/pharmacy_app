@@ -18,6 +18,19 @@ class Product {
     this.quantity,
     this.price,
   });
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      pharmaceuticalName: json['pharmaceuticalName'],
+      brandName: json['brandName'],
+      companyName: json['companyName'],
+      variant: json['variant'],
+      strength: json['strength'],
+      dosageForm: json['dosageForm'],
+      quantity: json['quantity'] as int,
+      price: json['price'] as int,
+    );
+  }
 }
 
 extension ProductNomenclature on Product {
@@ -34,25 +47,6 @@ extension ProductNomenclature on Product {
 }
 
 List<Product> inventory = [];
-
-class Store {
-  final String storeName;
-  final StoreType storeType;
-  final List<Staff> staff;
-  final List<Product> inventory;
-
-  Store({
-    required this.storeName,
-    required this.storeType,
-    required this.staff,
-    required this.inventory,
-  });
-}
-
-enum StoreType {
-  warehouse,
-  branch,
-}
 
 class Staff {
   final String name;

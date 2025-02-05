@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pebble_pharmacy/customization/theme/theme.dart';
+import 'package:pebble_pharmacy/models/user/role_model.dart';
+import 'package:pebble_pharmacy/models/user/user_model.dart';
 import 'package:pebble_pharmacy/routes/routes.dart';
 import 'package:pebble_pharmacy/view_models/providers.dart';
 import 'package:pebble_pharmacy/widgets/appButton.dart';
@@ -16,10 +18,11 @@ class SignUp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final usernameController = useTextEditingController();
-    final userTypeController = useTextEditingController();
     final passwordController = useTextEditingController();
     final reEnterPasswordController = useTextEditingController();
     final phoneNumberController = useTextEditingController();
+
+    final selectedRole = useState<Role>(Role.retailAssociate);
 
     final onboardingVM = ref.watch(onboardingProvider);
 
@@ -73,12 +76,26 @@ class SignUp extends HookConsumerWidget {
                       prefixIconButton: Icon(FontAwesomeIcons.lock),
                     ),
                     YMargin(40.h),
-                    AppTextField(
-                      label: "Role",
-                      isFilled: true,
-                      controller: userTypeController,
-                      prefixIconButton: Icon(FontAwesomeIcons.lock),
+                    DropdownButtonFormField<Role>(
+                        value: selectedRole.value,
+                        items: Role.values.map((Role role) {
+                          return DropdownMenuItem<Role>(
+                            value: role,
+                            child: Text(role.name),
+                          );
+                        }).toList(),
+                        onChanged: (Role? newRole) {
+                          if (newRole != null) {
+                            selectedRole.value = newRole;
+                          }
+                        },
+                      decoration: InputDecoration(
+                        labelText: "Select Role",
+                        border: OutlineInputBorder(),
+                        filled: true,
+                      ),
                     ),
+
                     YMargin(40.h),
                     Row(
                       children: [
@@ -96,15 +113,15 @@ class SignUp extends HookConsumerWidget {
                                       return;
                                     }
 
-                                    bool success =
+                                    User? user =
                                         await onboardingVM.registerUser(
                                       usernameController.text,
                                       phoneNumberController.text,
                                       passwordController.text,
-                                      "admin",
+                                      "manager",
                                     );
 
-                                    if (success) {
+                                    if (user != null) {
                                       Navigator.pushNamed(
                                           context, Routes.selectStore);
                                     } else {

@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pebble_pharmacy/customization/theme/colors.dart';
 import 'package:pebble_pharmacy/customization/theme/colorscheme.dart';
 import 'package:pebble_pharmacy/customization/theme/theme.dart';
+import 'package:pebble_pharmacy/models/user/user_model.dart';
 import 'package:pebble_pharmacy/routes/routes.dart';
 import 'package:pebble_pharmacy/view_models/providers.dart';
 import 'package:pebble_pharmacy/widgets/appButton.dart';
@@ -21,6 +22,7 @@ class SignIn extends HookConsumerWidget {
     final pinController = useTextEditingController();
 
     final onboardingVM = ref.watch(onboardingProvider);
+    final storeVM = ref.watch(storeViewModelProvider);
 
     return Scaffold(
       backgroundColor: appTheme.primaryColor,
@@ -109,24 +111,27 @@ class SignIn extends HookConsumerWidget {
                       Expanded(
                         child: AppButton(
                           onPressed: () async {
-
-                            bool success =
-                                await onboardingVM.logInUser(
+                            User? user = await onboardingVM.logInUser(
                               phoneNumberController.text,
                               pinController.text,
                             );
 
-                            if (success) {
-                              Navigator.pushNamed(
-                                  context, Routes.selectStore);
+                            if (user != null) {
+                              final stores = await storeVM.checkIfUserHasStores();
+
+                              if (stores.isNotEmpty) {
+                                Navigator.pushNamed(
+                                    context, Routes.selectStore, arguments: stores);
+                              } else {
+                                Navigator.pushNamed(
+                                    context, Routes.createStore);
+                              }
                             } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                  content:
-                                  Text("LogIn failed")));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("LogIn failed")));
                             }
                           },
-                          label: "Log In",
+                          label: onboardingVM.isLoading ? "Signing in ..." : "Log In",
                         ),
                       ),
                     ],
@@ -140,7 +145,7 @@ class SignIn extends HookConsumerWidget {
                           Navigator.pushNamed(context, Routes.signUp);
                         },
                         label: "I don't have an account",
-                            isText: true,
+                        isText: true,
                       ))
                     ],
                   )

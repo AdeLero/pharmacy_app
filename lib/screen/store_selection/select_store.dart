@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pebble_pharmacy/customization/theme/colorscheme.dart';
 import 'package:pebble_pharmacy/customization/theme/theme.dart';
+import 'package:pebble_pharmacy/models/state/storeProvider.dart';
+import 'package:pebble_pharmacy/models/state/user_provider.dart';
+import 'package:pebble_pharmacy/models/store/store_model.dart';
 import 'package:pebble_pharmacy/routes/routes.dart';
+import 'package:pebble_pharmacy/view_models/providers.dart';
 import 'package:pebble_pharmacy/widgets/appButton.dart';
 import 'package:pebble_pharmacy/widgets/spacing/y_margin.dart';
 import 'package:pebble_pharmacy/widgets/store_type_card.dart';
 
-class SelectStore extends StatelessWidget {
-  const SelectStore({super.key});
+class SelectStore extends HookConsumerWidget {
+  final List<Store> stores;
+  const SelectStore({super.key, required this.stores});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.read(userProvider);
+    final storeVM = ref.watch(storeViewModelProvider);
+
     return Scaffold(
       backgroundColor: appTheme.primaryColor,
       body: Padding(
@@ -28,28 +37,28 @@ class SelectStore extends StatelessWidget {
               ),
             ),
             YMargin(50.h),
-            // TODO Change this to a ListView when the logic for the store is complete
-            StoreTypeCard(
-              isWarehouse: true,
-              storeName: "Atan Store",
-              userRole: "Manager",
-              onTap: () {
-                Navigator.pushNamed(context, Routes.createStore);
-              },
-            ),
-            YMargin(10.h),
-            StoreTypeCard(
-              storeName: "Ijako Store",
-              userRole: "Salesperson",
-            ),
-
-            // After ListView
-
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount: stores.length,
+                itemBuilder: (context, index) {
+                  final store = stores[index];
+                  return StoreTypeCard(
+                    isWarehouse: true,
+                    storeName: store.storeName ?? '',
+                    userRole: user?.role?.name ?? '',
+                    onTap: () async {
+                      ref.read(storeProvider.notifier).setStore(store);
+                      await storeVM.selectStore();
+                      Navigator.pushNamed(context, Routes.landing);
+                    },
+                  );
+                }),
             Spacer(),
             Align(
               alignment: Alignment.centerRight,
               child: AppButton(
                 onPressed: () {
+                  ref.read(userProvider.notifier).clearUser();
                   Navigator.pushNamed(context, Routes.signIn);
                 },
                 label: "Sign Out",

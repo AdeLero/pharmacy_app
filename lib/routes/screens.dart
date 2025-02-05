@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pebble_pharmacy/models/routes/app_routes.dart';
+import 'package:pebble_pharmacy/models/store/store_model.dart';
 import 'package:pebble_pharmacy/routes/routes.dart';
 import 'package:pebble_pharmacy/screen/analysis/analysis_screen.dart';
 import 'package:pebble_pharmacy/screen/auth/sign_in.dart';
@@ -37,7 +38,7 @@ final screens = [
   ),
   AppRoutes(
     name: Routes.selectStore,
-    page: (_) => SelectStore(),
+    page: (arguments) => SelectStore(stores: arguments as List<Store>),
   ),
   AppRoutes(
     name: Routes.createStore,
